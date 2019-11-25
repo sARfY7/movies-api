@@ -1,0 +1,31 @@
+{
+  "name": "movies-api",
+  "version": "1.0.0",
+  "description": "Movies API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint *.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sARfY7/movies-api.git"
+  },
+  "author": "Sarfaraz Ahmed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sARfY7/movies-api/issues"
+  },
+  "homepage": "https://github.com/sARfY7/movies-api#readme",
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "nodemon": "^2.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "mysql": "^2.17.1",
+    "underscore": "^1.9.1"
+  }
+}
