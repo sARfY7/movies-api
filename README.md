@@ -1,65 +1,55 @@
-# NodeJS Module using raw SQL Queries
+# REST API using raw SQL Queries
 
-### Functions
+## API Definition
 
-1. Import JSON to SQL Table
-2. Create SQL Table
-3. Create Foreign Key Constraint
+Directors:
 
-#### - Import JSON to SQL Tables
+- Get all directors
+- Get the director with given ID
+- Add a new director
+- Update the director with given ID
+- Delete the director with given ID
 
-The table should already be defined and the table structure should be same as the JSON file being imported for the upload to work.
+Movies:
 
-```js
-uploadJson(jsonFile, tableName);
-```
+- Get all movies
+- Get the movie with given ID
+- Add a new movie
+- Update the movie with given ID
+- Delete the movie with given ID
 
-- `jsonFile` : JSON file you want to import to SQL Table
-- `tableName` : The table where you want the JSON to be uploaded (table should already be created)
+### API endpoints:
 
-#### - Create SQL Table
+#### Movies resource:
 
-```js
-createTable(tableName, tableSchema);
-```
+To manage the entire collection of movies resource
+URI : `/api/movies`
 
-- `tableName` : Name to be given to the table
-- `tableSchema` : Define column name and their data type(for data types refer to official mysql guide)
+GET : to retrieve all movies
+POST : to add a new movie
 
-Table Schema object :
+#### Movie resource
 
-```js
-{
-  id: {
-    type: "INT",
-    primaryKey: true
-  },
-  name: {
-    type: "TEXT"
-  },
-  dob: {
-    type: "DATE"
-  }
-}
-```
+To manage a single movie resource
+URI: `/api/movies/:movieId`
 
-- `type` : Data type of the column
-- `primaryKey` : To set the column as Primary Key for the table
+GET : to retrieve a movie
+PUT : to update details of a movie
+DELETE : to remove a movie
 
-#### - Create Foreign Key Constraint
+#### Directors resource:
 
-Both the tables should already be defined.
+To manage the entire collection of directors resource
+URI : `/api/directors`
 
-```js
-createForeignKeyConstraint(
-  tableName,
-  foreignKeyField,
-  referenceTableName,
-  referenceTableField
-);
-```
+GET : to retrieve all directors
+POST : to add a new director
 
-- `tableName` : Table you want to add foreign key constraint to
-- `foreignKeyField` : Field of the above defined table that will act as the reference to the referenced table
-- `referenceTableName` : Table to reference to
-- `referenceTableField` : Foreign Key field that is being referenced
+#### Director resource
+
+To manage a single director resource
+URI: `/api/directors/:directorId`
+
+GET : to retrieve a director
+PUT : to update details of a director
+DELETE : to remove a director
