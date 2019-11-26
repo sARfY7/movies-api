@@ -22,14 +22,13 @@ app.listen(PORT, (err) => {
   if (err) {
     log(err);
   } else {
-    log(`Server started at port ${PORT}`);
-    connection.connect((dbConnectionError) => {
-      if (dbConnectionError) {
-        log(dbConnectionError.sqlMessage);
-        process.exit(1);
-      } else {
-        log('Database connection established.');
-      }
-    });
+    connection
+      .authenticate()
+      .then(() => {
+        log(`Server started at port ${PORT}`);
+      })
+      .catch((dbConnectionError) => {
+        log(dbConnectionError);
+      });
   }
 });
