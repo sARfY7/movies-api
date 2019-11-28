@@ -1,4 +1,4 @@
-# REST API using raw SQL Queries
+# REST API using Sequelize ORM
 
 ## API Definition
 
