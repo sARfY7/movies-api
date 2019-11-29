@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const fs = require('fs');
+const morgan = require('morgan');
 const models = require('./models');
 
 // Route Imports
@@ -13,6 +15,16 @@ const { log } = console;
 // Express Body Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Logging using Morgan
+app.use(
+  morgan('dev', {
+    stream: fs.createWriteStream('./logs/request/access.log', {
+      encoding: 'utf-8',
+      flags: 'a',
+    }),
+  })
+);
 
 // Routes Registeration
 app.use('/api/directors', directorRoutes);
