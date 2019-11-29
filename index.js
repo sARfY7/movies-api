@@ -3,6 +3,7 @@ const express = require('express');
 const fs = require('fs');
 const morgan = require('morgan');
 const models = require('./models');
+const logger = require('./utils/logger.util');
 
 // Route Imports
 const directorRoutes = require('./routes/director.route');
@@ -29,6 +30,10 @@ app.use(
 // Routes Registeration
 app.use('/api/directors', directorRoutes);
 app.use('/api/movies', movieRoutes);
+app.use('*', (req, res) => {
+  logger.error(`404 Page Not Found`);
+  res.status(404).send('404 Page Not Found');
+});
 
 models.sequelize.sync().then(() => {
   app.listen(PORT, (err) => {
