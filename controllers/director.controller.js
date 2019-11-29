@@ -9,7 +9,23 @@ const createDirector = (req, res) => {
       res.status(201).json(directorCreated);
     })
     .catch((err) => {
-      res.status(500).json(err);
+      if (err.name) {
+        if (err.name === 'SequelizeValidationError') {
+          const errors = [];
+          err.errors.forEach((error) => {
+            errors.push(error.message);
+          });
+          const errorObj = {
+            name: 'ValidationError',
+            errors,
+          };
+          res.status(400).json(errorObj);
+        } else {
+          res.status(500).json(err);
+        }
+      } else {
+        res.status(500).json(err);
+      }
     });
 };
 
@@ -17,10 +33,14 @@ const readDirector = (req, res) => {
   const { id } = req.params;
   Director.findByPk(id)
     .then((director) => {
-      res.status(200).json(director);
+      if (director) {
+        res.status(200).json(director);
+      } else {
+        throw new Error('Director not found');
+      }
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(500).json(err.message);
     });
 };
 
@@ -37,12 +57,32 @@ const readAllDirectors = (req, res) => {
 const updateDirector = (req, res) => {
   const { id } = req.params;
   const { newDirectorName } = req.body;
-  Director.update({ name: newDirectorName }, { returning: true, where: { id } })
+  Director.update({ name: newDirectorName }, { where: { id } })
     .then((updatedDirector) => {
-      res.status(200).json(updatedDirector);
+      if (updatedDirector[0]) {
+        res.status(200).json(updatedDirector);
+      } else {
+        throw new Error('Director not found');
+      }
     })
     .catch((err) => {
-      res.status(500).json(err);
+      if (err.name) {
+        if (err.name === 'SequelizeValidationError') {
+          const errors = [];
+          err.errors.forEach((error) => {
+            errors.push(error.message);
+          });
+          const errorObj = {
+            name: 'ValidationError',
+            errors,
+          };
+          res.status(400).json(errorObj);
+        } else {
+          res.status(500).json(err.message);
+        }
+      } else {
+        res.status(500).json(err.message);
+      }
     });
 };
 
@@ -50,10 +90,14 @@ const deleteDirector = (req, res) => {
   const { id } = req.params;
   Director.destroy({ where: { id } })
     .then((deletedDirector) => {
-      res.status(200).json(deletedDirector);
+      if (deletedDirector) {
+        res.status(200).json(deletedDirector);
+      } else {
+        throw new Error('Director not found');
+      }
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(500).json(err.message);
     });
 };
 

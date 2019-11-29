@@ -34,7 +34,23 @@ const createMovie = (req, res) => {
       res.status(201).json(createdMovie);
     })
     .catch((err) => {
-      res.status(500).json(err);
+      if (err.name) {
+        if (err.name === 'SequelizeValidationError') {
+          const errors = [];
+          err.errors.forEach((error) => {
+            errors.push(error.message);
+          });
+          const errorObj = {
+            name: 'ValidationError',
+            errors,
+          };
+          res.status(400).json(errorObj);
+        } else {
+          res.status(500).json(err);
+        }
+      } else {
+        res.status(500).json(err);
+      }
     });
 };
 
@@ -42,10 +58,14 @@ const readMovie = (req, res) => {
   const { id } = req.params;
   Movie.findByPk(id)
     .then((movie) => {
-      res.status(200).json(movie);
+      if (movie) {
+        res.status(200).json(movie);
+      } else {
+        throw new Error('Movie not found');
+      }
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(400).json(err.message);
     });
 };
 
@@ -87,12 +107,32 @@ const updateMovie = (req, res) => {
     actor: newMovieActor,
     year: newMovieYear,
   };
-  Movie.update(newMovie, { returning: true, where: { id } })
+  Movie.update(newMovie, { where: { id } })
     .then((updatedMovie) => {
-      res.status(200).json(updatedMovie);
+      if (updatedMovie[0] === 1) {
+        res.status(200).json({ message: 'Movie updated successfully' });
+      } else {
+        throw new Error('Movie not found');
+      }
     })
     .catch((err) => {
-      res.status(500).json(err);
+      if (err.name) {
+        if (err.name === 'SequelizeValidationError') {
+          const errors = [];
+          err.errors.forEach((error) => {
+            errors.push(error.message);
+          });
+          const errorObj = {
+            name: 'ValidationError',
+            errors,
+          };
+          res.status(400).json(errorObj);
+        } else {
+          res.status(500).json(err.message);
+        }
+      } else {
+        res.status(500).json(err.message);
+      }
     });
 };
 
@@ -100,10 +140,14 @@ const deleteMovie = (req, res) => {
   const { id } = req.params;
   Movie.destroy({ where: { id } })
     .then((deletedMovie) => {
-      res.status(200).json(deletedMovie);
+      if (deletedMovie) {
+        res.status(200).json({ message: 'Movie deleted successfully' });
+      } else {
+        throw new Error('Movie not found');
+      }
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(500).json(err.message);
     });
 };
 
