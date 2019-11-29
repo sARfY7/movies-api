@@ -1,4 +1,4 @@
-# REST API using Sequelize ORM
+# REST API using Sequelize ORM and Winston and Morgan for Logging
 
 ## API Definition
 
