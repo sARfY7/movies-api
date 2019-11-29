@@ -1,4 +1,5 @@
 const { Director } = require('../models');
+const logger = require('../utils/logger.util');
 
 const { log } = console;
 
@@ -9,6 +10,7 @@ const createDirector = (req, res) => {
       res.status(201).json(directorCreated);
     })
     .catch((err) => {
+      logger.error(err);
       if (err.name) {
         if (err.name === 'SequelizeValidationError') {
           const errors = [];
@@ -40,6 +42,7 @@ const readDirector = (req, res) => {
       }
     })
     .catch((err) => {
+      logger.error(err.message);
       res.status(500).json(err.message);
     });
 };
@@ -50,6 +53,7 @@ const readAllDirectors = (req, res) => {
       res.status(200).json(directors);
     })
     .catch((err) => {
+      logger.error(err);
       res.status(500).json(err);
     });
 };
@@ -66,6 +70,7 @@ const updateDirector = (req, res) => {
       }
     })
     .catch((err) => {
+      logger.error(err);
       if (err.name) {
         if (err.name === 'SequelizeValidationError') {
           const errors = [];
@@ -97,6 +102,7 @@ const deleteDirector = (req, res) => {
       }
     })
     .catch((err) => {
+      logger.error(err);
       res.status(500).json(err.message);
     });
 };

@@ -1,4 +1,5 @@
 const { Movie } = require('../models');
+const logger = require('../utils/logger.util');
 
 const { log } = console;
 
@@ -34,6 +35,7 @@ const createMovie = (req, res) => {
       res.status(201).json(createdMovie);
     })
     .catch((err) => {
+      logger.error(err);
       if (err.name) {
         if (err.name === 'SequelizeValidationError') {
           const errors = [];
@@ -65,6 +67,7 @@ const readMovie = (req, res) => {
       }
     })
     .catch((err) => {
+      logger.error(err);
       res.status(400).json(err.message);
     });
 };
@@ -75,6 +78,7 @@ const readAllMovies = (req, res) => {
       res.status(200).json(movies);
     })
     .catch((err) => {
+      logger.error(err);
       res.status(500).json(err);
     });
 };
@@ -116,6 +120,7 @@ const updateMovie = (req, res) => {
       }
     })
     .catch((err) => {
+      logger.error(err);
       if (err.name) {
         if (err.name === 'SequelizeValidationError') {
           const errors = [];
@@ -147,6 +152,7 @@ const deleteMovie = (req, res) => {
       }
     })
     .catch((err) => {
+      logger.error(err);
       res.status(500).json(err.message);
     });
 };
